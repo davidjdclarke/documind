@@ -1,0 +1,17 @@
+{
+    "editor.rulers": [
+        120
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestsEnabled": true,
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.lintOnSave": true,
+    "autoDocString.docstringFormat": "one-line-sphinx",
+    "python.testing.pytestEnabled": true
+}

@@ -1,0 +1,66 @@
+{
+    "MIG": {
+        "Q1": {
+            "prompt": "Has the claimant sustained a ‘minor injury’ as defined in the SABS? (yes/no)",
+            "max_tokens": 5,
+            "target": "yes",
+            "prediction": null
+        }
+    },
+    "MRB": {
+        "Q1": {
+            "prompt": "Are the proposed goods and services of the Treatment and Assessment Plan considered reasonable and necessary? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "no",
+            "prediction": null
+        },
+        "Q2": {
+            "prompt": "What are the customary healing times for the diagnosis?",
+            "max_tokens": 100,
+            "target": "The customary healing times for soft tissue injuries is 12-16 weeks and the collagen at 20 weeks.",
+            "prediction": null
+        },
+        "Q3": {
+            "prompt": "Are the costs of the proposed goods and services within the Professional Services Fee Guideline? (yes/no/na)",
+            "max_tokens": 5,
+            "target": "not applicable",
+            "prediction": null
+        },
+        "Q4": {
+            "prompt": "What should be the costs of the proposed goods and services (in accordance with FSCO Guidelines)?",
+            "max_tokens": 100,
+            "target": "not applicable",
+            "prediction": null
+        },
+        "Q5": {
+            "prompt": "What further medical treatment or rehabilitation services are necessary?",
+            "max_tokens": 100,
+            "target": "not applicable",
+            "prediction": null
+        },
+        "Q6": {
+            "prompt": "If further medical or rehabilitation services are required – please specifically state: \n- Focus of the recommended intervention.  \n-  Type of treatment modality.  \n-  Frequency.  \n-  Duration.  \n-  Cost of treatment and any equipment required.",
+            "max_tokens": 100,
+            "target": "not applicable",
+            "prediction": null
+        },
+        "Q7": {
+            "prompt": "Is any other physical modality of treatment required? (yes/no/not applicable)",
+            "max_tokens": 100,
+            "target": "no",
+            "prediction": null
+        },
+        "Q8": {
+            "prompt": "As a result of the impairment sustained in the motor vehicle accident are the drugs prescribed reasonable and necessary? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "yes",
+            "prediction": null
+        },
+        "Q9": {
+            "prompt": "Are the costs of the assessment(s) and/or examination(s) within the Professional Fee Guideline? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "not applicable",
+            "prediction": null
+        }
+    }
+}

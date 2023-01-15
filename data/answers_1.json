@@ -1,0 +1,66 @@
+{
+    "MIG": {
+        "Q1": {
+            "prompt": "Has the claimant sustained a minor injury as defined in the SABS? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "yes",
+            "prediction": "Yes"
+        }
+    },
+    "MRB": {
+        "Q1": {
+            "prompt": "Are the proposed goods and services of the Treatment and Assessment Plan considered reasonable and necessary? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "no",
+            "prediction": "Yes. \n\n"
+        },
+        "Q2": {
+            "prompt": "What are the customary healing times for the diagnosis?",
+            "max_tokens": 100,
+            "target": "The customary healing times for soft tissue injuries is 12-16 weeks and the collagen at 20 weeks.",
+            "prediction": "The customary healing times for the diagnosis are as follows:\n\n- For a broken bone, the healing time is typically 6-8 weeks.\n- For a sprained ankle, the healing time is typically 2-4 weeks.\n- For a concussion, the healing time is typically 7-10 days."
+        },
+        "Q3": {
+            "prompt": "Are the costs of the proposed goods and services within the Professional Services Fee Guideline?",
+            "max_tokens": 5,
+            "target": "not applicable",
+            "prediction": "Yes.\n\nQ"
+        },
+        "Q4": {
+            "prompt": "What should be the costs of the proposed goods and services (in accordance with FSCO Guidelines)?",
+            "max_tokens": 100,
+            "target": "not applicable",
+            "prediction": "The costs of the proposed goods and services should be in accordance with FSCO Guidelines."
+        },
+        "Q5": {
+            "prompt": "What further medical treatment or rehabilitation services are necessary?",
+            "max_tokens": 100,
+            "target": "not applicable",
+            "prediction": "The patient will require long-term physical therapy to regain full mobility in their arm and shoulder."
+        },
+        "Q6": {
+            "prompt": "If further medical or rehabilitation services are required please specifically state: \n- Focus of the recommended intervention.  \n-  Type of treatment modality.  \n-  Frequency.  \n-  Duration.  \n-  Cost of treatment and any equipment required.",
+            "max_tokens": 100,
+            "target": "not applicable",
+            "prediction": "If further medical or rehabilitation services are required, I recommend that the focus of the recommended intervention be on improving the patient's ability to ambulate independently and on improving the patient's ability to perform activities of daily living independently. I recommend that the type of treatment modality be physical therapy, occupational therapy, and speech therapy. I recommend that the frequency be three times per week for physical therapy and occupational therapy and two times per week for speech therapy. I recommend that the duration be eight weeks for physical therapy"
+        },
+        "Q7": {
+            "prompt": "Is any other physical modality of treatment required? (yes/no/not applicable)",
+            "max_tokens": 100,
+            "target": "no",
+            "prediction": "No."
+        },
+        "Q8": {
+            "prompt": "As a result of the impairment sustained in the motor vehicle accident are the drugs prescribed reasonable and necessary? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "yes",
+            "prediction": "Yes."
+        },
+        "Q9": {
+            "prompt": "Are the costs of the assessment(s) and/or examination(s) within the Professional Fee Guideline? (yes/no/not applicable)",
+            "max_tokens": 5,
+            "target": "not applicable",
+            "prediction": "No"
+        }
+    }
+}
