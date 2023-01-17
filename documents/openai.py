@@ -1,8 +1,8 @@
-import openai
-import string
 import random
-
+import string
 from typing import Optional
+
+import openai
 
 
 class OpenAIConnector:
@@ -10,15 +10,17 @@ class OpenAIConnector:
         self._api_key = api_key
         self._session_id = None
         openai.api_key = self._api_key
-    
+
     def start_session(self, length: int = 10) -> str:
         """
         Start a session with the OpenAI API.
-        
+
         :param length: The length of the session ID
         :return: The session ID
         """
-        self._session_id = "".join(random.choices(string.ascii_letters + string.digits, k=length))
+        self._session_id = "".join(
+            random.choices(string.ascii_letters + string.digits, k=length)
+        )
 
     def complete(
         self,
@@ -72,8 +74,8 @@ class OpenAIConnector:
         Send a request to the OpenAI API and return the response.
 
         Args:
-            prompt (str): 
-            instruction (str): 
+            prompt (str):
+            instruction (str):
             engine (str, optional): _description_. Defaults to "text-davinci-003".
             max_tokens (int, optional): _description_. Defaults to 1024.
             temperature (float, optional): _description_. Defaults to 0.5.
