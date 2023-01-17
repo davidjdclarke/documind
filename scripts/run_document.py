@@ -1,12 +1,13 @@
 import os
+from load_dotenv import load_dotenv
 
 from documents.openai import OpenAIConnector
 from documents.prompt import Prompt
-
 from documents.utils import read_text_file, save_json
 
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Load the environment variables
+load_dotenv(".env")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 
 if __name__ == "__main__":
