@@ -10,13 +10,18 @@ class StreamlitRunner:
         self.openai_connector = open_ai_connector
 
     def run(self):
-        document_input = st.text_input("Document Path", "data/anon_1.txt")
-        submit_button = st.button("Submit Document", key="submit_button")
+        st.title("AI Document Processor")
+        upload_file = st.file_uploader("")
+        submit_button = st.button("Upload Document")
 
         if submit_button:
-            st.session_state.questions = []
-            st.session_state.responses = []
-            st.session_state.document = read_text_file(document_input)
+            if upload_file is not None and "document" not in st.session_state:
+                st.session_state.questions = []
+                st.session_state.responses = []
+
+                st.session_state.document = upload_file.getvalue().decode("utf-8")
+            else:
+                st.write("No file uploaded")
 
         if "document" in st.session_state:
             st.write(st.session_state.document)
