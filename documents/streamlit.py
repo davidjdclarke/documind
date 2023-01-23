@@ -2,7 +2,7 @@ import streamlit as st
 
 from documents.openai import OpenAIConnector
 from documents.prompt import Prompt
-from documents.utils import read_text_file
+from documents.utils import read_text_file, convert_pdf_to_txt
 
 
 class StreamlitRunner:
@@ -19,7 +19,12 @@ class StreamlitRunner:
                 st.session_state.questions = []
                 st.session_state.responses = []
 
-                st.session_state.document = upload_file.getvalue().decode("utf-8")
+                if upload_file.name.endswith(".pdf"):
+                    st.session_state.document = convert_pdf_to_txt(
+                        upload_file.getvalue()
+                    )
+                else:
+                    st.session_state.document = upload_file.getvalue().decode("utf-8")
             else:
                 st.write("No file uploaded")
 
@@ -34,8 +39,8 @@ class StreamlitRunner:
             question = st.text_input("", key=f"question_{key}")
             if st.button("Ask", key=f"ask_button_{key}"):
                 st.session_state.questions.append(f"{question}")
-                response = self.openai_connector.complete(
-                    Prompt.format_question_prompt(st.session_state.document, question),
-                    max_tokens=100,
-                )
+                # response = self.openai_connector.complete(
+                #     Prompt.format_question_prompt(st.session_state.document, question),
+                #     max_tokens=100,
+                # )
                 st.session_state.responses.append(f"{response}")
