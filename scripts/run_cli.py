@@ -1,9 +1,14 @@
 import os
+import sys
 from load_dotenv import load_dotenv
+
+root = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(root)
+load_dotenv(".env")
 
 from documents.openai import OpenAIConnector
 from documents.prompt import Prompt
-from documents.utils import read_text_file
+from documents.utils import read_file
 
 # Load the environment variables
 load_dotenv(".env")
@@ -15,7 +20,7 @@ if __name__ == "__main__":
     prompt_reader = Prompt("resources/questions.json")
 
     # Read the documents
-    input_document = read_text_file("data/anon_1.txt")
+    input_document = read_file("data/anon_1.txt")
 
     while 1:
         question = input(">>> ")

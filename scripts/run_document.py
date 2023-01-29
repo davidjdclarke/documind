@@ -3,7 +3,7 @@ from load_dotenv import load_dotenv
 
 from documents.openai import OpenAIConnector
 from documents.prompt import Prompt
-from documents.utils import read_text_file, save_json
+from documents.utils import read_file, save_json
 
 # Load the environment variables
 load_dotenv(".env")
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     prompt_reader = Prompt("resources/questions.json")
 
     # Read the documents
-    input_document = read_text_file("data/anon_1.txt")
+    input_document = read_file("data/anon_1.txt")
 
     # Generate Predictions
     answers = prompt_reader.get_questions()

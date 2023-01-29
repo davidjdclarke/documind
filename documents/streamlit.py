@@ -1,8 +1,17 @@
+from datetime import datetime
 import streamlit as st
 
 from documents.openai import OpenAIConnector
 from documents.prompt import Prompt
-from documents.utils import read_text_file
+from documents.utils import read_file, save_file
+
+
+LOG_PATH = "./tmp/log.txt"
+
+
+def log(message: str):
+    with open(LOG_PATH, "a") as f:
+        f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n{message}\n\n")
 
 
 class StreamlitRunner:
@@ -10,13 +19,23 @@ class StreamlitRunner:
         self.openai_connector = open_ai_connector
 
     def run(self):
-        document_input = st.text_input("Document Path", "data/anon_1.txt")
-        submit_button = st.button("Submit Document", key="submit_button")
+        st.title("AI Document Processor")
+        upload_file = st.file_uploader("")
+        submit_button = st.button("Upload Document")
 
         if submit_button:
-            st.session_state.questions = []
-            st.session_state.responses = []
-            st.session_state.document = read_text_file(document_input)
+            if upload_file is not None and "document" not in st.session_state:
+                st.session_state.questions = []
+                st.session_state.responses = []
+
+                if upload_file.name.endswith(".pdf"):
+                    upload_file.getvalue()
+                    save_file(f"./tmp/{upload_file.name}", str(upload_file.getvalue()))
+                    st.session_state.document = read_file(f"./tmp/{upload_file.name}")
+                else:
+                    st.session_state.document = upload_file.getvalue().decode("utf-8")
+            else:
+                st.write("No file uploaded")
 
         if "document" in st.session_state:
             st.write(st.session_state.document)
@@ -29,8 +48,15 @@ class StreamlitRunner:
             question = st.text_input("", key=f"question_{key}")
             if st.button("Ask", key=f"ask_button_{key}"):
                 st.session_state.questions.append(f"{question}")
-                response = self.openai_connector.complete(
-                    Prompt.format_question_prompt(st.session_state.document, question),
-                    max_tokens=100,
+                log("question: " + question)
+                question = question.split("**")
+                response = (
+                    self.openai_connector.complete(
+                        Prompt.format_question_prompt(
+                            st.session_state.document, question[0]
+                        ),
+                        max_tokens=int(question[1]) if len(question) > 1 else 100,
+                    ),
                 )
-                st.session_state.responses.append(f"{response}")
+                log("response: " + response[0])
+                st.session_state.responses.append(f"{response[0]}")
