@@ -1,20 +1,22 @@
 import json
 
+from typing import Any
 from io import StringIO
+
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 
 
-def read_text_file(file_path: str) -> str:
+def read_file(file_path: str) -> str:
     with open(file_path, "r") as f:
         return f.read()
 
 
-def write_text_file(file_path: str, text: str):
+def save_file(file_path: str, data: Any):
     with open(file_path, "w") as f:
-        f.write(text)
+        f.write(data)
 
 
 def read_json(file_path: str) -> dict:
