@@ -19,7 +19,9 @@ class StreamlitRunner:
         self.openai_connector = open_ai_connector
 
     def run(self):
-        st.title("AI Document Processor")
+        st.set_page_config(page_title="docuMIND", page_icon="resources/icon.png")
+        st.markdown("**DISCLAIMER: All data used in this demo is synthetic.**")
+        st.image("resources/logo.png", width=200)
         upload_file = st.file_uploader("")
         submit_button = st.button("Upload Document")
 
@@ -27,13 +29,18 @@ class StreamlitRunner:
             if upload_file is not None and "document" not in st.session_state:
                 st.session_state.questions = []
                 st.session_state.responses = []
+                log(f"NEW FILE: {str(upload_file.getvalue())}")
 
                 if upload_file.name.endswith(".pdf"):
                     upload_file.getvalue()
                     save_file(f"./tmp/{upload_file.name}", str(upload_file.getvalue()))
-                    st.session_state.document = read_file(f"./tmp/{upload_file.name}")
+                    st.session_state.document = read_file(
+                        f"./tmp/{upload_file.name}"
+                    ).replace("$", "\$")
                 else:
-                    st.session_state.document = upload_file.getvalue().decode("utf-8")
+                    st.session_state.document = (
+                        upload_file.getvalue().decode("utf-8").replace("$", "\$")
+                    )
             else:
                 st.write("No file uploaded")
 
@@ -43,6 +50,7 @@ class StreamlitRunner:
             for q, a in zip(st.session_state.questions, st.session_state.responses):
                 st.text_input("", q, key=f"question_{key}")
                 st.write(a, key=f"answer_{key}")
+                st.radio("", ["Correct", "Incorrect"], key=f"radio_{key}")
                 key += 1
 
             question = st.text_input("", key=f"question_{key}")
