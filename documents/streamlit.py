@@ -3,7 +3,7 @@ import streamlit as st
 
 from documents.openai import OpenAIConnector
 from documents.prompt import Prompt
-from documents.utils import read_file, save_file
+from documents.utils import convert_pdf_to_txt, save_json, save_bytes
 
 
 LOG_PATH = "./tmp/log.txt"
@@ -22,30 +22,29 @@ class StreamlitRunner:
         st.set_page_config(page_title="docuMIND", page_icon="resources/icon.png")
         st.markdown("**DISCLAIMER: All data used in this demo is synthetic.**")
         st.image("resources/logo.png", width=200)
-        upload_file = st.file_uploader("")
+        upload_file = st.file_uploader("", type=["pdf", "txt"])
         submit_button = st.button("Upload Document")
 
         if submit_button:
             if upload_file is not None and "document" not in st.session_state:
                 st.session_state.questions = []
                 st.session_state.responses = []
-                log(f"NEW FILE: {str(upload_file.getvalue())}")
 
                 if upload_file.name.endswith(".pdf"):
-                    upload_file.getvalue()
-                    save_file(f"./tmp/{upload_file.name}", str(upload_file.getvalue()))
-                    st.session_state.document = read_file(
-                        f"./tmp/{upload_file.name}"
-                    ).replace("$", "\$")
+                    filename = f"tmp/{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}-{upload_file.name}"
+                    save_bytes(filename, upload_file.getvalue())
+                    st.session_state.document_content = convert_pdf_to_txt(filename)
                 else:
-                    st.session_state.document = (
+                    st.session_state.document_content = (
                         upload_file.getvalue().decode("utf-8").replace("$", "\$")
                     )
+                st.session_state.document_name = upload_file.name
             else:
                 st.write("No file uploaded")
 
-        if "document" in st.session_state:
-            st.write(st.session_state.document)
+        if "document_content" in st.session_state:
+            with st.expander(st.session_state.document_name):
+                st.write(st.session_state.document_content)
             key = 0
             for q, a in zip(st.session_state.questions, st.session_state.responses):
                 st.text_input("", q, key=f"question_{key}")
@@ -61,10 +60,21 @@ class StreamlitRunner:
                 response = (
                     self.openai_connector.complete(
                         Prompt.format_question_prompt(
-                            st.session_state.document, question[0]
+                            st.session_state.document_content, question[0]
                         ),
                         max_tokens=int(question[1]) if len(question) > 1 else 100,
                     ),
                 )
                 log("response: " + response[0])
                 st.session_state.responses.append(f"{response[0]}")
+            if st.button("Export", key="export"):
+                export = {
+                    "title": st.session_state.document_name,
+                    "content": st.session_state.document_content,
+                    "questions": st.session_state.questions,
+                    "responses": st.session_state.responses,
+                }
+                save_json(
+                    f"logs/{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}-{st.session_state.document_name}.json",
+                    export,
+                )

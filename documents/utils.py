@@ -1,6 +1,6 @@
 import json
 
-from typing import Any
+from typing import Any, List, Optional
 from io import StringIO
 
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -16,6 +16,11 @@ def read_file(file_path: str) -> str:
 
 def save_file(file_path: str, data: Any):
     with open(file_path, "w") as f:
+        f.write(data)
+
+
+def save_bytes(file_path: str, data: bytes):
+    with open(file_path, "wb") as f:
         f.write(data)
 
 
@@ -59,3 +64,18 @@ def convert_pdf_to_txt(pdf_path):
     text_converter.close()
     text_output.close()
     return extracted_text
+
+
+def split_list(input_list: List[Any], n: int) -> List[Any]:
+    """
+    Split a list into n sublists.
+
+    Args:
+        input_list (List[Any]): list to split
+        n (int): number of sublists
+
+    Returns:
+        List[Any]: _description_
+    """
+    quotient, remainder = divmod(len(input_list), n)
+    return [input_list[i * quotient + min(i, remainder):(i + 1) * quotient + min(i + 1, remainder)] for i in range(n)]
