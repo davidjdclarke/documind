@@ -11,28 +11,17 @@ class OpenAIConnector:
         self._session_id = None
         openai.api_key = self._api_key
 
-    def start_session(self, length: int = 10) -> str:
-        """
-        Start a session with the OpenAI API.
-
-        :param length: The length of the session ID
-        :return: The session ID
-        """
-        self._session_id = "".join(
-            random.choices(string.ascii_letters + string.digits, k=length)
-        )
-
     def complete(
         self,
         prompt: str,
-        max_tokens: int = 5,
+        max_tokens: int = 100,
         model: str = "text-davinci-003",
         temperature: float = 0.5,
         top_p: float = 1,
         frequency_penalty: float = 0,
         presence_penalty: float = 0,
         stop: Optional[str] = None,
-    ):
+    ) -> str:
         """
         Send a request to the OpenAI API and return the response.
 

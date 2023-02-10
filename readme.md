@@ -1,4 +1,4 @@
-# Documents
+# docuMIND
 Document processing library with OpenAI GPT-3 as the backend engine.
 
 ## Installation
