@@ -7,7 +7,7 @@ root = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(root)
 load_dotenv(".env")
 
-from documents.utils import save_file, read_file, convert_pdf_to_txt
+from documind.utils import save_file, read_file, convert_pdf_to_txt
 
 
 def test_convert_pdf_to_txt_with_valid_file():

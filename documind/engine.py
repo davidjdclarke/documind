@@ -2,7 +2,7 @@ import tiktoken
 
 from typing import List, Tuple
 
-from documind.openai import OpenAIConnector
+from documind.openai import OpenAIClient
 from documind.prompt import Prompt
 
 PRICING_MODEL = {
@@ -14,7 +14,7 @@ PRICING_MODEL = {
 
 
 class DocumindEngine:
-    def __init__(self, open_ai_connector: OpenAIConnector):
+    def __init__(self, open_ai_connector: OpenAIClient):
         self.openai_connector = open_ai_connector
         self.encoding = tiktoken.get_encoding("gpt2")
 

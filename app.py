@@ -8,12 +8,12 @@ sys.path.append(root)
 load_dotenv(".env")
 
 from documind.streamlit import StreamlitRunner
-from documind.openai import OpenAIConnector
+from documind.openai import OpenAIClient
 from documind.engine import DocumindEngine
 
 
 if __name__ == "__main__":
-    openai_connector = OpenAIConnector(os.environ.get("OPENAI_API_KEY"))
+    openai_connector = OpenAIClient(os.environ.get("OPENAI_API_KEY"))
     engine = DocumindEngine(openai_connector)
 
     streamlit_manager = StreamlitRunner(engine)

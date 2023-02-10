@@ -1,10 +1,10 @@
-from documind.openai import OpenAIConnector
+from documind.openai import OpenAIClient
 from documind.prompt import Prompt
 
 
 class FinacialProcessor:
-    def __init__(self, openai_connector: OpenAIConnector) -> None:
-        self._openai_connector: OpenAIConnector = openai_connector
+    def __init__(self, openai_connector: OpenAIClient) -> None:
+        self._openai_connector: OpenAIClient = openai_connector
 
     def process_quarterly_results(data: str):
         first_section = data[:1000]

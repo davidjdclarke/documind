@@ -5,7 +5,7 @@ from typing import Optional
 import openai
 
 
-class OpenAIConnector:
+class OpenAIClient:
     def __init__(self, api_key: Optional[str] = None):
         self._api_key = api_key
         self._session_id = None
