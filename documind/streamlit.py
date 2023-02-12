@@ -1,3 +1,5 @@
+import logging
+
 from datetime import datetime
 import streamlit as st
 
@@ -7,6 +9,7 @@ from documind.utils import convert_pdf_to_txt, save_json, save_bytes
 
 
 LOG_PATH = "./tmp/log.txt"
+logger = logging.getLogger(__name__)
 
 
 def log(message: str):
@@ -18,9 +21,52 @@ class StreamlitRunner:
     def __init__(self, engine: DocumindEngine):
         self.engine: DocumindEngine = engine
 
-    def run(self):
+    def run_chat(self):
         st.set_page_config(page_title="docuMIND", page_icon="resources/icon.png")
-        st.markdown("**DISCLAIMER: All data used in this demo is synthetic.**")
+        st.image("resources/logo.png", width=200)
+
+        start_button = st.button("New Chat")
+
+        if start_button:
+            logger.info("New chat started")
+            st.session_state.history = ""
+            st.session_state.messages = []
+            st.session_state.responses = []
+            st.session_state.costs = []
+
+        if st.session_state.get("messages") is not None:
+            key = 0
+            for message, response, cost in zip(
+                st.session_state.messages,
+                st.session_state.responses,
+                st.session_state.costs,
+            ):
+                st.text_input("", message, key=f"message_{key}")
+                st.write(response, key=f"response_{key}")
+                st.caption(
+                    f"request: {round(cost, 2)} \u00A2 (total: {round(sum(st.session_state.costs), 2)} \u00A2)"
+                )
+                key += 1
+
+            message = st.text_input("", key=f"question_{key}")
+            if st.button("Send", key=f"send_{key}"):
+                logger.info(f"New message: {message}")
+                message = message.split("**")
+                st.session_state.messages.append(f"{message[0]}")
+
+                logger.info("Sending request to OpenAI")
+                response, cost, history = self.engine.chat(
+                    message[0],
+                    history=st.session_state.history,
+                    max_tokens=int(message[1]) if len(message) > 1 else 100,
+                )
+                logger.info(f"Response: {response}")
+                st.session_state.responses.append(f"{response}")
+                st.session_state.costs.append(cost)
+                st.session_state.history = history
+
+    def run_documind(self):
+        st.set_page_config(page_title="docuMIND", page_icon="resources/icon.png")
         st.image("resources/logo.png", width=200)
         upload_file = st.file_uploader("", type=["pdf", "txt"])
         submit_button = st.button("Upload Document")

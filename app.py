@@ -18,4 +18,4 @@ if __name__ == "__main__":
 
     streamlit_manager = StreamlitRunner(engine)
 
-    streamlit_manager.run()
+    streamlit_manager.run_documind()

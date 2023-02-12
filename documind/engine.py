@@ -1,9 +1,12 @@
+import logging
 import tiktoken
 
 from typing import List, Tuple
 
 from documind.openai import OpenAIClient
 from documind.prompt import Prompt
+
+logger = logging.getLogger(__name__)
 
 PRICING_MODEL = {
     "text-davinci-003": 0.02,
@@ -53,7 +56,7 @@ class DocumindEngine:
     def get_blocks(
         self,
         text: str,
-        max_tokens: int = 4097,
+        max_token: int = 4097,
         prompt: str = "",
         response_tokens: int = 100,
         offset: int = 100,
@@ -71,7 +74,7 @@ class DocumindEngine:
         Returns:
             List[str]: _description_
         """
-        block_size = max_tokens - len(self.encoding.encode(prompt)) - response_tokens
+        block_size = max_token - len(self.encoding.encode(prompt)) - response_tokens
         num_blocks = len(text) // (block_size - offset) + 1
 
         blocks = []
@@ -84,7 +87,7 @@ class DocumindEngine:
 
     def _split_infrence(self, text: str, prompt: str, max_tokens: int = 4097) -> str:
         blocks = self.get_blocks(
-            text, prompt=prompt, response_tokens=max_tokens, max_tokens=2000
+            text, prompt=prompt, response_tokens=max_tokens, max_token=2000
         )
         responses = []
         cost = 0
@@ -117,4 +120,17 @@ class DocumindEngine:
             responses = self._split_infrence(document, question, max_tokens=2000)
             prompt = Prompt.summarize_responses(responses)
             num_tokens = len(self.encoding.encode(prompt))
+
         return self.request(prompt, max_tokens=max_tokens)
+
+    def chat(self, message: str, history: str = "", max_tokens: int = 100) -> str:
+        message = Prompt.format_question_prompt(history, message)
+
+        if len(self.encoding.encode(message)) + max_tokens > 4097:
+            message = self.encoding.decode(self.encoding.encode(message)[-4097:])
+
+        logger.info(f"Sending message: {message}")
+        response, cost = self.request(message, max_tokens=max_tokens)
+        history = history + message + response
+
+        return response, cost, history
