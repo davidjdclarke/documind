@@ -1,5 +1,3 @@
-import random
-import string
 from typing import Optional
 
 import openai
@@ -8,7 +6,6 @@ import openai
 class OpenAIClient:
     def __init__(self, api_key: Optional[str] = None):
         self._api_key = api_key
-        self._session_id = None
         openai.api_key = self._api_key
 
     def complete(
@@ -16,7 +13,7 @@ class OpenAIClient:
         prompt: str,
         max_tokens: int = 100,
         model: str = "text-davinci-003",
-        temperature: float = 0.5,
+        temperature: float = 0.2,
         top_p: float = 1,
         frequency_penalty: float = 0,
         presence_penalty: float = 0,
@@ -44,7 +41,6 @@ class OpenAIClient:
             presence_penalty=presence_penalty,
             stop=stop,
         )
-
         return response.choices[0].text
 
     def edit(

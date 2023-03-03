@@ -22,7 +22,7 @@ class StreamlitRunner:
         self.engine: DocumindEngine = engine
 
     def run_chat(self):
-        st.set_page_config(page_title="docuMIND", page_icon="resources/icon.png")
+        st.set_page_config(page_title="documind", page_icon="resources/icon.png")
         st.image("resources/logo.png", width=200)
 
         start_button = st.button("New Chat")
@@ -66,7 +66,7 @@ class StreamlitRunner:
                 st.session_state.history = history
 
     def run_documind(self):
-        st.set_page_config(page_title="docuMIND", page_icon="resources/icon.png")
+        st.set_page_config(page_title="documind", page_icon="resources/icon.png")
         st.image("resources/logo.png", width=200)
         upload_file = st.file_uploader("", type=["pdf", "txt"])
         submit_button = st.button("Upload Document")
