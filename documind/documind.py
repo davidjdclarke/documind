@@ -18,7 +18,13 @@ class Documind:
 
         self.responses = {}
 
-    def process(self, question: str, max_tokens: int = 100, deep: bool = False, document = Optional[Document] = None) -> str:
+    def process(
+        self,
+        question: str,
+        max_tokens: int = 100,
+        deep: bool = True,
+        document: Optional[Document] = None,
+    ) -> str:
         """
         Answer a question using the document.
 
@@ -48,9 +54,9 @@ class Documind:
                 # print(f"Response: {response}")
 
                 if "..." not in response:
-                    return response
+                    return response, 0
 
-            return "No answer found."
+            return "No answer found.", 0
 
         # print("Deep inference enabled. Using threads. (This may take a while)")
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
@@ -64,7 +70,11 @@ class Documind:
             ]
 
         # print("Threads complete. Summarizing responses.")
-        return self.openai.complete(
-            Prompt.summarize_responses([f.result() for f in futures]),
-            max_tokens=max_tokens,
+        # return [f.result() for f in futures]
+        return (
+            self.openai.complete(
+                Prompt.summarize_responses([f.result() for f in futures]),
+                max_tokens=max_tokens,
+            ),
+            0,
         )

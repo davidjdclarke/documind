@@ -3,7 +3,8 @@ import logging
 from datetime import datetime
 import streamlit as st
 
-from documind.engine import DocumindEngine
+from documind.documind import Documind
+from documind.document import Document
 from documind.prompt import Prompt
 from documind.utils import convert_pdf_to_txt, save_json, save_bytes
 
@@ -18,52 +19,52 @@ def log(message: str):
 
 
 class StreamlitRunner:
-    def __init__(self, engine: DocumindEngine):
-        self.engine: DocumindEngine = engine
+    def __init__(self, engine: Documind):
+        self.engine = engine
 
-    def run_chat(self):
-        st.set_page_config(page_title="documind", page_icon="resources/icon.png")
-        st.image("resources/logo.png", width=200)
+    # def run_chat(self):
+    #     st.set_page_config(page_title="documind", page_icon="resources/icon.png")
+    #     st.image("resources/logo.png", width=200)
 
-        start_button = st.button("New Chat")
+    #     start_button = st.button("New Chat")
 
-        if start_button:
-            logger.info("New chat started")
-            st.session_state.history = ""
-            st.session_state.messages = []
-            st.session_state.responses = []
-            st.session_state.costs = []
+    #     if start_button:
+    #         logger.info("New chat started")
+    #         st.session_state.history = ""
+    #         st.session_state.messages = []
+    #         st.session_state.responses = []
+    #         st.session_state.costs = []
 
-        if st.session_state.get("messages") is not None:
-            key = 0
-            for message, response, cost in zip(
-                st.session_state.messages,
-                st.session_state.responses,
-                st.session_state.costs,
-            ):
-                st.text_input("", message, key=f"message_{key}")
-                st.write(response, key=f"response_{key}")
-                st.caption(
-                    f"request: {round(cost, 2)} \u00A2 (total: {round(sum(st.session_state.costs), 2)} \u00A2)"
-                )
-                key += 1
+    #     if st.session_state.get("messages") is not None:
+    #         key = 0
+    #         for message, response, cost in zip(
+    #             st.session_state.messages,
+    #             st.session_state.responses,
+    #             st.session_state.costs,
+    #         ):
+    #             st.text_input("", message, key=f"message_{key}")
+    #             st.write(response, key=f"response_{key}")
+    #             st.caption(
+    #                 f"request: {round(cost, 2)} \u00A2 (total: {round(sum(st.session_state.costs), 2)} \u00A2)"
+    #             )
+    #             key += 1
 
-            message = st.text_input("", key=f"question_{key}")
-            if st.button("Send", key=f"send_{key}"):
-                logger.info(f"New message: {message}")
-                message = message.split("**")
-                st.session_state.messages.append(f"{message[0]}")
+    #         message = st.text_input("", key=f"question_{key}")
+    #         if st.button("Send", key=f"send_{key}"):
+    #             logger.info(f"New message: {message}")
+    #             message = message.split("**")
+    #             st.session_state.messages.append(f"{message[0]}")
 
-                logger.info("Sending request to OpenAI")
-                response, cost, history = self.engine.chat(
-                    message[0],
-                    history=st.session_state.history,
-                    max_tokens=int(message[1]) if len(message) > 1 else 100,
-                )
-                logger.info(f"Response: {response}")
-                st.session_state.responses.append(f"{response}")
-                st.session_state.costs.append(cost)
-                st.session_state.history = history
+    #             logger.info("Sending request to OpenAI")
+    #             response, cost, history = self.engine.chat(
+    #                 message[0],
+    #                 history=st.session_state.history,
+    #                 max_tokens=int(message[1]) if len(message) > 1 else 100,
+    #             )
+    #             logger.info(f"Response: {response}")
+    #             st.session_state.responses.append(f"{response}")
+    #             st.session_state.costs.append(cost)
+    #             st.session_state.history = history
 
     def run_documind(self):
         st.set_page_config(page_title="documind", page_icon="resources/icon.png")
@@ -87,9 +88,8 @@ class StreamlitRunner:
                     st.session_state.document_content = (
                         upload_file.getvalue().decode("utf-8").replace("$", "\$")
                     )
-                st.session_state.tokens = self.engine.get_tokens(
-                    st.session_state.document_content
-                )
+                document = Document(st.session_state.document_content)
+                st.session_state.tokens = document.size
                 st.session_state.document_name = upload_file.name
             else:
                 st.write("No file uploaded")
@@ -114,7 +114,7 @@ class StreamlitRunner:
                 log("question: " + question)
                 question = question.split("**")
                 response, cost = self.engine.process(
-                    document=st.session_state.document_content,
+                    document=Document(st.session_state.document_content),
                     question=question[0],
                     max_tokens=int(question[1]) if len(question) > 1 else 100,
                 )

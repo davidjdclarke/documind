@@ -19,7 +19,7 @@ class Prompt:
         num_responses = len(responses)
         for i, response in enumerate(responses):
             merged += f"\n[RESPONSE {i} of {num_responses}]: \n{response}"
-        return f"{merged} \n\nuser: \nsythenize the above responses into a single response. \n\ndocumind: \n"
+        return f"{merged} \n\nuser: \nsythenize the above responses into a single response (ignore responses that say the answer couldn't be found) \n\ndocumind: \n"
 
     @staticmethod
     def prompt_on_segment(

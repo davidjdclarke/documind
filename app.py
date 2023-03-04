@@ -9,12 +9,14 @@ load_dotenv(".env")
 
 from documind.streamlit import StreamlitRunner
 from documind.openai import OpenAIClient
-from documind.engine import DocumindEngine
+from documind.documind import Documind
+from documind.document import Document
 
 
 if __name__ == "__main__":
-    openai_connector = OpenAIClient(os.environ.get("OPENAI_API_KEY"))
-    engine = DocumindEngine(openai_connector)
+    openai = OpenAIClient(os.environ.get("OPENAI_API_KEY"))
+    document = Document("")
+    engine = Documind(document, openai)
 
     streamlit_manager = StreamlitRunner(engine)
 
