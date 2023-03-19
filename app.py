@@ -7,12 +7,17 @@ root = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(root)
 load_dotenv(".env")
 
-from documents.streamlit import StreamlitRunner
-from documents.openai import OpenAIConnector
+from documind.streamlit import StreamlitRunner
+from documind.openai import OpenAIClient
+from documind.documind import Documind
+from documind.document import Document
 
 
 if __name__ == "__main__":
-    openai_connector = OpenAIConnector(os.environ.get("OPENAI_API_KEY"))
-    streamlit_manager = StreamlitRunner(openai_connector)
+    openai = OpenAIClient(os.environ.get("OPENAI_API_KEY"))
+    document = Document("")
+    engine = Documind(document, openai)
 
-    streamlit_manager.run()
+    streamlit_manager = StreamlitRunner(engine)
+
+    streamlit_manager.run_documind()

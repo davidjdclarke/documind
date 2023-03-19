@@ -6,9 +6,9 @@ root = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(root)
 load_dotenv(".env")
 
-from documents.openai import OpenAIConnector
-from documents.prompt import Prompt
-from documents.utils import read_file
+from documind.openai import OpenAIClient
+from documind.prompt import Prompt
+from documind.utils import read_file
 
 # Load the environment variables
 load_dotenv(".env")
@@ -16,7 +16,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 if __name__ == "__main__":
     # Create an OpenAI connector and load the questions
-    openai_connector = OpenAIConnector(OPENAI_API_KEY)
+    openai_connector = OpenAIClient(OPENAI_API_KEY)
     prompt_reader = Prompt("resources/questions.json")
 
     # Read the documents

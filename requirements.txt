@@ -1,3 +1,5 @@
 openai
 streamlit
 pdfminer
+load_dotenv
+tiktoken
