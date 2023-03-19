@@ -121,7 +121,7 @@ class StreamlitRunner:
                 key += 1
 
             question = st.text_input("", key=f"question_{key}")
-            if st.button("Ask", key=f"ask_button_{key}"):
+            if st.button("send", key=f"ask_button_{key}"):
                 st.session_state.questions.append(f"{question}")
                 log("question: " + question)
                 question = question.split("**")
@@ -133,14 +133,3 @@ class StreamlitRunner:
                 log("response: " + response)
                 st.session_state.responses.append(f"{response}")
                 st.session_state.costs.append(cost)
-            if st.button("Export", key="export"):
-                export = {
-                    "title": st.session_state.document_name,
-                    "content": st.session_state.document_content,
-                    "questions": st.session_state.questions,
-                    "responses": st.session_state.responses,
-                }
-                save_json(
-                    f"logs/{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}-{st.session_state.document_name}.json",
-                    export,
-                )

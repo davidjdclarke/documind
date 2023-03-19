@@ -11,11 +11,23 @@ from documind.openai import OpenAIClient
 logger = logging.getLogger(__name__)
 
 
+PRICING_MODEL = {
+    "text-davinci-003": 0.02,
+    "text-curie-001": 0.002,
+    "text-babbage-001": 0.0005,
+    "text-ada-001": 0.0004,
+}
+
+
+def get_cost(num_tokens: int, model: str = "text-davinci-003") -> float:
+    return PRICING_MODEL[model] * num_tokens / 10
+
+
 class Documind:
     def __init__(self, document: Document, openai: OpenAIClient):
         self.document = document
         self.openai = openai
-
+        self.cost = []
         self.responses = {}
 
     def process(
@@ -37,29 +49,34 @@ class Documind:
             self.document = document
         prompt = Prompt.format_question_prompt(self.document.text, question)
         prompt_size = self.document.get_num_tokens(prompt) + max_tokens
+        cost = get_cost(prompt_size)
+        logger.info(f"Processing question with estimated cost of {cost} cents.")
 
         if prompt_size < 4097:
-            return self.openai.complete(prompt, max_tokens=max_tokens)
+            logger.info("Single-part prompt required.")
+            response = self.openai.complete(prompt, max_tokens=max_tokens)
+            logger.info(f"Response: {response}")
+            return response, cost
 
-        # print(f"Multi-part prompt required. First prompt size: {prompt_size}")
         chunks = self.document.chunk_text(
             4097 - (prompt_size - self.document.get_num_tokens(self.document.text)), 126
         )
+        logger.info(f"Split document into {len(chunks)} chunks.")
 
         if not deep:
             for i, chunk in enumerate(chunks):
-                # print(f"Inferencing on chunk {i+1} of {len(chunks)}")
+                logger.info(f"Inferencing on chunk {i+1} of {len(chunks)}")
                 prompt = Prompt.format_question_prompt(chunk, question)
                 response = self.openai.complete(prompt, max_tokens=max_tokens)
-                # print(f"Response: {response}")
 
                 if "..." not in response:
-                    return response, 0
+                    return response, cost
 
-            return "No answer found.", 0
+            return "No answer found.", cost
 
-        # print("Deep inference enabled. Using threads. (This may take a while)")
+        logger.info("Deep inference enabled. Using threads. (This may take a while)")
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            logger.info("Starting threads...")
             futures = [
                 executor.submit(
                     self.openai.complete,
@@ -68,13 +85,13 @@ class Documind:
                 )
                 for chunk in chunks
             ]
+            logger.info("Waiting for threads to finish...")
 
-        # print("Threads complete. Summarizing responses.")
-        # return [f.result() for f in futures]
+        logger.info("Threads finished. Processing responses...")
         return (
             self.openai.complete(
                 Prompt.summarize_responses([f.result() for f in futures]),
                 max_tokens=max_tokens,
             ),
-            0,
+            cost,
         )
