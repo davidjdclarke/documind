@@ -8,6 +8,9 @@ class OpenAIClient:
         self._api_key = api_key
         openai.api_key = self._api_key
 
+    def chat(self):
+        pass
+
     def complete(
         self,
         prompt: str,

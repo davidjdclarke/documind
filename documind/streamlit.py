@@ -1,4 +1,5 @@
 import logging
+import base64
 
 from datetime import datetime
 import streamlit as st
@@ -84,7 +85,12 @@ class StreamlitRunner:
                     st.session_state.document_content = convert_pdf_to_txt(
                         filename
                     ).replace("$", "\$")
+                    with open(filename, "rb") as f:
+                        st.session_state.base64_pdf = base64.b64encode(f.read()).decode(
+                            "utf-8"
+                        )
                 else:
+                    st.session_state.base64_pdf = None
                     st.session_state.document_content = (
                         upload_file.getvalue().decode("utf-8").replace("$", "\$")
                     )
@@ -96,7 +102,13 @@ class StreamlitRunner:
 
         if "document_content" in st.session_state:
             with st.expander(st.session_state.document_name):
-                st.write(st.session_state.document_content)
+                if st.session_state.base64_pdf is not None:
+                    st.markdown(
+                        f"<embed src='data:application/pdf;base64,{st.session_state.base64_pdf}' width='700' height='1000' type='application/pdf'>",
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    st.markdown(st.session_state.document_content)
             key = 0
             st.caption(f"Tokens in document: {st.session_state.tokens}")
             for q, a in zip(st.session_state.questions, st.session_state.responses):

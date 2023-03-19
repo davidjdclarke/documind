@@ -13,10 +13,16 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Documents",
+            "name": "Python: Run DocuMind",
             "type": "python",
             "request": "launch",
             "module": "scripts.run_documents",
+        },
+        {
+            "name": "Python: Documents",
+            "type": "python",
+            "request": "launch",
+            "module": "scripts.test",
         }
     ]
 }
