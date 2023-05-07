@@ -46,13 +46,15 @@ Follow these steps to set up DocuMind on your local machine:1. Clone the reposit
 First, clone the DocuMind repository to your local machine using the following command:bash
 ```bash
 git clone https://github.com/davidjdclarke/documind
-```2. Set up a virtual environment
+```
+2. Set up a virtual environment
 
 Navigate to the cloned repository and set up a virtual environment to manage dependencies. This ensures that the required packages don't interfere with your system's global Python installation. Use the following commands:bash
 ```bash
 cd documind
 python -m venv venv
-```3. Activate the virtual environment
+```
+3. Activate the virtual environment
 
 Activate the virtual environment using the appropriate command for your operating system:
 
@@ -87,6 +89,7 @@ Visit https://platform.openai.com/signup and sign up for an account. Once you ha
 Copy your API key from the API Keys section.3. Set up the API key as an environment variable
 
 Create a ```.env``` file in the root directory of the DocuMind project (the same directory as ```app.py```). Inside the ```.env``` file, add the following line, replacing ```&lt;your-api-key-here&gt;``` with your OpenAI API key:bash
+
 ```bash
 OPENAI_API_KEY='&lt;your-api-key-here&gt;'
 ```
