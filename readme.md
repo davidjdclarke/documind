@@ -64,12 +64,14 @@ source venv/bin/activate
 For Windows:bash
 ```bash
 venv\Scripts\activate
-```4. Install the required dependencies
+```
+4. Install the required dependencies
 
 With the virtual environment activated, install the necessary packages by running:bash
 ```bash
 pip install -r requirements.txt
-```Running the application
+```
+Running the application
 
 To run the DocuMind application, use the following command:bash
 ```bash
