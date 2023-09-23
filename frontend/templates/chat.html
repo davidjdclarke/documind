@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Automated Customer Service Chat</title>
+        <link rel="stylesheet" href="../static/chat.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- Left Column for File Upload and Preview -->
+            <div class="left-column">
+                <div class="custom-file-upload">
+                    <form action="/upload" method="post" enctype="multipart/form-data">
+                        <label for="file">File</label>
+                        <input id="file" name="file" type="file" />
+                        <br /><br />
+                        <button>Upload</button>
+                    </form>
+                </div>
+                <div id="filePreview">
+                    <!-- Preview of the uploaded file will appear here -->
+                </div>
+            </div>
+        
+            <!-- Right Column for Chat -->
+            <div class="right-column">
+                <div class="chat-container">
+                    <div class="chat-header">eCM.ai</div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div id="typingIndicator" class="typing-indicator" style="display: none;">
+                            <div class="typing-indicator-dot"></div>
+                            <div class="typing-indicator-dot"></div>
+                            <div class="typing-indicator-dot"></div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userInput" placeholder="Type your message...">
+                        <button id="sendButton">Send</button>
+                        <input type="file" id="fileUpload">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='chat.js') }}"></script>
+    </body>
+
+</html>

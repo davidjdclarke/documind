@@ -1,0 +1,180 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+    padding: 10px;
+}
+
+.file-preview {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.custom-file-upload label {
+    background-color: #f4f4f4;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#fileName {
+    margin-left: 10px;
+}
+
+.chat-container {
+    width: 400px;
+    height: 600px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 15px;
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    position: relative;
+}
+
+.chat-input {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Send Button Styles */
+.chat-input button {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    /* smooth transition for the button press effect */
+}
+
+.chat-input button:active {
+    transform: translateY(2px);
+    /* moves the button slightly downwards when pressed */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* adds a shadow for a "lifting" effect */
+}
+
+input[type="file"] {
+    display: none;
+    /* Hide the default file input and we'll make our own button */
+}
+
+/* Message styles */
+.message {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    max-width: 70%;
+    clear: both;
+}
+
+.user-message {
+    background-color: #3498db;
+    color: #fff;
+    float: right;
+}
+
+.server-response {
+    background-color: #e0e0e0;
+    /* Grey background */
+    color: #333;
+    float: left;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    max-width: 70%;
+    clear: both;
+}
+
+.typing-indicator {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.typing-indicator-dot {
+    width: 4px;
+    height: 4px;
+    background-color: #57585a;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation-name: bounce;
+    animation-duration: 1.3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.typing-indicator-dot:nth-of-type(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-indicator-dot:nth-of-type(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+    0%,
+    20%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-5px);
+    }
+
+    60% {
+        transform: translateY(-3px);
+    }
+}
